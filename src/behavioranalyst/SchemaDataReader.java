@@ -60,7 +60,8 @@ public class SchemaDataReader extends SwingWorker{
     TraceData currData = null;
     for(int fileCount = 0 ; fileCount < dataFiles.length ; fileCount ++){
         currData = new TraceData(this.getDataLength());
-        currData = readSchemaData(dataFiles[fileCount],startFrames[fileCount],(startFrames[fileCount]+1800));
+        currData = readSchemaData(dataFiles[fileCount],startFrames[fileCount],(startFrames[fileCount]+1800)); 
+                                                                                        //assumes the trial length is 60 s and 30 fps
     }
     
     return positionData;
@@ -112,7 +113,7 @@ public class SchemaDataReader extends SwingWorker{
     private TraceData readSchemaData(File dataFile, int startFrame, int endFrame) {
         TraceData data = new TraceData(this.getDataLength());
         FileReader in = null; 
-        int currFrame;
+        int currFrame = 0;
         try {
             in = new FileReader(dataFile);
         } catch (FileNotFoundException ex) {
@@ -120,7 +121,7 @@ public class SchemaDataReader extends SwingWorker{
         }
         BufferedReader br = new BufferedReader(in);
         String line;                                   
-        
+        int prev_b = 0, prev_c = 0;
         try {
             while((line = br.readLine())!= null){
                 
@@ -139,10 +140,14 @@ public class SchemaDataReader extends SwingWorker{
                 //  int y = (int)c;
                 currFrame = Math.round(a);
                 if(currFrame >= startFrame && currFrame <= endFrame){
-                    if(a != -1 || b != -1){
-                        
+                    if(c != -1 || b != -1){
+                        data.addData(prev_b, prev_c);           //does not take care of no tracking objects when it comes first 
+                    }else{
+                        data.addData(b, c);
+                        prev_b = (int)b;
+                        prev_c = (int)c;
                     }
-                    data.addData(b, c);
+                    
                 }else{
                     return data;
                 }
@@ -151,6 +156,9 @@ public class SchemaDataReader extends SwingWorker{
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }   } catch (IOException ex) {
             Logger.getLogger(SchemaDataReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(currFrame < endFrame){           //the file terminated before the 60 s so padd the rest of the data with the last location.
+                                            // number of frames to pad is endFrame - currFrame
         }
     return data; 
 }
