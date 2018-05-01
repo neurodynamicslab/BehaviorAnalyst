@@ -16,13 +16,13 @@ import NDL_JavaClassLib.MultiSelectFrame;
 public class FrontEnd_MainFrame extends javax.swing.JFrame {
 
     private String[] fNames; //File Names of the data for Schema Analyser. The data format is frame number space x space y space newline. 
-                             //x and y co-ordinates are stored as float !!! (Not required and over kill)
-    private SchemaDataReader analyst = new SchemaDataReader();
+    private SchemaDataReader analyst;
 
     /**
      * Creates new form FrontEnd_MainFrame
      */
     public FrontEnd_MainFrame() {
+        
         initComponents();
     }
 
