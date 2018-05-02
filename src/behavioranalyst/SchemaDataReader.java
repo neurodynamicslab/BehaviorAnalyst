@@ -71,6 +71,7 @@ public class SchemaDataReader extends SwingWorker{
         this.fileNames = fileNames;
         this.includeAllframes = true;
         
+        
     }
     public SchemaDataReader(File[] dataFiles){
         this.dataFiles = dataFiles;

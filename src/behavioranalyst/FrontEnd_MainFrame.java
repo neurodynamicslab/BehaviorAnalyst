@@ -6,6 +6,7 @@
 package behavioranalyst;
 
 import NDL_JavaClassLib.MultiSelectFrame;
+import javax.swing.JOptionPane;
 
 
 
@@ -17,6 +18,7 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
 
     private String[] fNames; //File Names of the data for Schema Analyser. The data format is frame number space x space y space newline. 
     private SchemaDataReader analyst;
+    private startFrameEntryDialog startFrameEntry;
 
     /**
      * Creates new form FrontEnd_MainFrame
@@ -196,13 +198,21 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         Fs.setVisible(true);
         
         this.fNames = Fs.getSelectionArray();
-        //if()
+        int status = Fs.getResult();
+        if(status == MultiSelectFrame.OPEN){
+            
+                this.startFrameEntry = new startFrameEntryDialog(this, true);
+                if (startFrameEntry.isUp2date()){
+                    analyst = new SchemaDataReader(fNames);
+                    analyst.setDataLength(1800);
+                    analyst.doInBackground();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Please Enter the Starting Frames or Select to include all frames");
+                }
+        }else{
+            
+        }
         
-        analyst = new SchemaDataReader(fNames);
-        analyst.setDataLength(1800);
-        
-        analyst.doInBackground();
-        //analyst.run();
         
     }//GEN-LAST:event_ImportSchemaAnalyserActionPerformed
 

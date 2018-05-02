@@ -14,6 +14,8 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
     /**
      * Creates new form startFrameEntryDialog
      */
+    private boolean Up2date = false; // true - ready, false - not ready
+    
     public startFrameEntryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -30,6 +32,8 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         startframeTable = new javax.swing.JTable();
+        Update_Data_Button = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Enter the trial start frame numbers");
@@ -75,6 +79,7 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
+        startframeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         startframeTable.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(startframeTable);
         startframeTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -82,26 +87,65 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
             startframeTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
+        Update_Data_Button.setText("Update Data");
+        Update_Data_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update_Data_ButtonActionPerformed(evt);
+            }
+        });
+
+        jCheckBox1.setText(" Include All Frames");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Update_Data_Button)
+                .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addComponent(jScrollPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox1)
+                    .addComponent(Update_Data_Button))
+                .addGap(8, 8, 8))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void Update_Data_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update_Data_ButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update_Data_ButtonActionPerformed
+
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Update_Data_Button;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable startframeTable;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the Up2date
+     */
+    public boolean isUp2date() {
+        return Up2date;
+    }
+
+    /**
+     * @param Up2date the Up2date to set
+     */
+    public void setUp2date(boolean Up2date) {
+        this.Up2date = Up2date;
+    }
 }
