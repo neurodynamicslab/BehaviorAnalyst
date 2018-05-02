@@ -196,7 +196,12 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         Fs.setVisible(true);
         
         this.fNames = Fs.getSelectionArray();
-        analyst.run();
+        
+        analyst = new SchemaDataReader(fNames);
+        analyst.setDataLength(1800);
+        
+        analyst.doInBackground();
+        //analyst.run();
         
     }//GEN-LAST:event_ImportSchemaAnalyserActionPerformed
 
