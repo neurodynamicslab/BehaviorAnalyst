@@ -19,7 +19,8 @@ import javax.swing.SwingWorker;
 //import TraceData;
 
 /**
- *
+ * The class created to read the position data of mice in a video in the form of x, y (both float !!) with frames separated by new line. 
+ * The design is such that once the object is instantiated with file names , the duration of the tracking and the array of frame number from which the trial begins.
  * @author Balaji
  */
 public class SchemaDataReader extends SwingWorker{
@@ -33,7 +34,7 @@ public class SchemaDataReader extends SwingWorker{
     
 
     /**
-     *
+     * set the file names and the 
      * @return
      */
     @Override
