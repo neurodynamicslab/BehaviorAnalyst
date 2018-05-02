@@ -85,9 +85,9 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         mapsReadyStatus.setFocusable(false);
         mapsReadyStatus.setOpaque(true);
 
-        jLabel1.setText("Files Ready");
+        jLabel1.setText("File Selection");
 
-        jLabel3.setText("Data Ready");
+        jLabel3.setText("Data Read");
 
         jLabel4.setText("Maps Ready");
 
@@ -146,7 +146,7 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(552, 552, 552)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,7 +161,7 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jLabel2)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,11 +197,14 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         MultiSelectFrame Fs = new MultiSelectFrame();
         Fs.setVisible(true);
         
-        this.fNames = Fs.getSelectionArray();
+        
         int status = Fs.getResult();
         if(status == MultiSelectFrame.OPEN){
             
+                this.fNames = Fs.getSelectionArray();
+                
                 this.startFrameEntry = new startFrameEntryDialog(this, true);
+                
                 if (startFrameEntry.isUp2date()){
                     analyst = new SchemaDataReader(fNames);
                     analyst.setDataLength(1800);
@@ -210,7 +213,7 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Please Enter the Starting Frames or Select to include all frames");
                 }
         }else{
-            
+            JOptionPane.showMessageDialog(null, "You need to choose the datafiles");
         }
         
         

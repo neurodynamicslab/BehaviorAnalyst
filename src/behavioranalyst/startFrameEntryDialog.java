@@ -5,6 +5,8 @@
  */
 package behavioranalyst;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Balaji
@@ -15,6 +17,8 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
      * Creates new form startFrameEntryDialog
      */
     private boolean Up2date = false; // true - ready, false - not ready
+    private int[] startFrames;
+    private int NoE;
     
     public startFrameEntryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -34,6 +38,7 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
         startframeTable = new javax.swing.JTable();
         Update_Data_Button = new javax.swing.JButton();
         jCheckBox1 = new javax.swing.JCheckBox();
+        addButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Enter the trial start frame numbers");
@@ -74,9 +79,16 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.Integer.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         startframeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -96,14 +108,23 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
 
         jCheckBox1.setText(" Include All Frames");
 
+        addButton.setText("Add rows");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jCheckBox1)
+                .addGap(31, 31, 31)
+                .addComponent(addButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Update_Data_Button)
                 .addGap(23, 23, 23))
@@ -111,11 +132,12 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBox1)
-                    .addComponent(Update_Data_Button))
+                    .addComponent(Update_Data_Button)
+                    .addComponent(addButton))
                 .addGap(8, 8, 8))
         );
 
@@ -123,13 +145,26 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Update_Data_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update_Data_ButtonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here
+        int numberofEntries = startframeTable.getRowCount();
+        
+        for(int count = 0 ; count < numberofEntries ; count++){
+            this.startFrames[count] = (int)startframeTable.getValueAt(count, 2);
+        }
+        this.NoE  = numberofEntries;
     }//GEN-LAST:event_Update_Data_ButtonActionPerformed
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel tabmodel = (DefaultTableModel)startframeTable.getModel();
+        tabmodel.addRow(new Object[] {"",""});
+    }//GEN-LAST:event_addButtonActionPerformed
 
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Update_Data_Button;
+    private javax.swing.JButton addButton;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable startframeTable;
