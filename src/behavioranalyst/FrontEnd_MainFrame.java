@@ -5,6 +5,7 @@
  */
 package behavioranalyst;
 
+import NDL_JavaClassLib.MultiFileDialog;
 import NDL_JavaClassLib.MultiSelectFrame;
 import javax.swing.JOptionPane;
 
@@ -194,7 +195,8 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
 
     private void ImportSchemaAnalyserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportSchemaAnalyserActionPerformed
         // TODO add your handling code here:
-        MultiSelectFrame Fs = new MultiSelectFrame();
+        //MultiSelectFrame Fs = new MultiSelectFrame();
+        MultiFileDialog Fs = new MultiFileDialog(this, true);
         Fs.setVisible(true);
         
         
@@ -213,7 +215,7 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Please Enter the Starting Frames or Select to include all frames");
                 }
         }else{
-            JOptionPane.showMessageDialog(null, "You need to choose the datafiles");
+            //JOptionPane.showMessageDialog(null, "You need to choose the datafiles");
         }
         
         
