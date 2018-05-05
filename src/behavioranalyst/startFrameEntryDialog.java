@@ -5,6 +5,8 @@
  */
 package behavioranalyst;
 
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,6 +21,7 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
     private boolean Up2date = false; // true - ready, false - not ready
     private int[] startFrames;
     private int NoE;
+    private int nFrames = 1800;
     
     public startFrameEntryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -37,8 +40,11 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         startframeTable = new javax.swing.JTable();
         Update_Data_Button = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        IncludeAllFrames_CheckBox = new javax.swing.JCheckBox();
         addButton = new javax.swing.JButton();
+        totFrames = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        EstimateButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Enter the trial start frame numbers");
@@ -106,7 +112,7 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
             }
         });
 
-        jCheckBox1.setText(" Include All Frames");
+        IncludeAllFrames_CheckBox.setText(" Include All Frames");
 
         addButton.setText("Add rows");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -115,27 +121,54 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
             }
         });
 
+        totFrames.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        totFrames.setText("1800");
+        totFrames.setToolTipText("Enter the total number of frames");
+
+        jLabel1.setText("Enter the total number of frames");
+
+        EstimateButton.setText("Click here to estimate");
+        EstimateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EstimateButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jCheckBox1)
                 .addGap(31, 31, 31)
-                .addComponent(addButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(IncludeAllFrames_CheckBox)
+                        .addGap(31, 31, 31)
+                        .addComponent(addButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(totFrames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Update_Data_Button)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Update_Data_Button)
+                    .addComponent(EstimateButton))
                 .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
+                    .addComponent(jLabel1)
+                    .addComponent(totFrames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EstimateButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(IncludeAllFrames_CheckBox)
                     .addComponent(Update_Data_Button)
                     .addComponent(addButton))
                 .addGap(8, 8, 8))
@@ -151,7 +184,9 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
         for(int count = 0 ; count < numberofEntries ; count++){
             this.startFrames[count] = (int)startframeTable.getValueAt(count, 2);
         }
+        nFrames = Integer.valueOf(totFrames.getText());
         this.NoE  = numberofEntries;
+        setUp2date(true);
     }//GEN-LAST:event_Update_Data_ButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -160,14 +195,36 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
         tabmodel.addRow(new Object[] {"",""});
     }//GEN-LAST:event_addButtonActionPerformed
 
-   
+    private void EstimateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstimateButtonActionPerformed
+        // TODO add your handling code here:
+        JTextField fpsEntry = new JTextField("30");
+        JTextField duration = new JTextField("1800");
+        Object message [] = {
+            "Enter the framerate (fps)", fpsEntry,
+            "Enter the duration of trial (s)", duration,
+        };
+        JOptionPane EstimateDialog = new JOptionPane();
+        int result;
+        result = JOptionPane.showConfirmDialog(this, message, "Enter the parameters",JOptionPane.OK_CANCEL_OPTION);
+        
+        if(result == JOptionPane.OK_OPTION ){
+           totFrames.setText ( ""+ Integer.valueOf(fpsEntry.getText()) *Integer.valueOf(duration.getText()));
+        }
+    }//GEN-LAST:event_EstimateButtonActionPerformed
+
+   public boolean getIncludeAllFramesStatus(){
+              return IncludeAllFrames_CheckBox.isSelected();
+   }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton EstimateButton;
+    private javax.swing.JCheckBox IncludeAllFrames_CheckBox;
     private javax.swing.JButton Update_Data_Button;
     private javax.swing.JButton addButton;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable startframeTable;
+    private javax.swing.JTextField totFrames;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -182,5 +239,19 @@ public class startFrameEntryDialog extends javax.swing.JDialog {
      */
     public void setUp2date(boolean Up2date) {
         this.Up2date = Up2date;
+    }
+
+    /**
+     * @return the startFrames
+     */
+    public int[] getStartFrames() {
+        return startFrames;
+    }
+
+    /**
+     * @return the nFrames
+     */
+    public int getnFrames() {
+        return nFrames;
     }
 }

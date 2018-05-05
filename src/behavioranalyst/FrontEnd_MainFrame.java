@@ -194,11 +194,9 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_OpenVideoMenuActionPerformed
 
     private void ImportSchemaAnalyserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportSchemaAnalyserActionPerformed
-        // TODO add your handling code here:
-        //MultiSelectFrame Fs = new MultiSelectFrame();
+                
         MultiFileDialog Fs = new MultiFileDialog(this, true);
         Fs.setVisible(true);
-        
         
         int status = Fs.getResult();
         if(status == MultiSelectFrame.OPEN){
@@ -206,16 +204,23 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
                 this.fNames = Fs.getSelectionArray();
                 
                 this.startFrameEntry = new startFrameEntryDialog(this, true);
+                startFrameEntry.setVisible(true);
                 
                 if (startFrameEntry.isUp2date()){
-                    analyst = new SchemaDataReader(fNames);
-                    analyst.setDataLength(1800);
+                    if(startFrameEntry.getIncludeAllFramesStatus()){
+                        analyst = new SchemaDataReader(fNames);
+                    }else{
+                        int startS[] = startFrameEntry.getStartFrames();
+                        analyst = new SchemaDataReader(fNames,startS);
+                    }
+                    int nFrames = startFrameEntry.getnFrames();
+                    analyst.setDataLength(nFrames);                //// Get the time period from GUI. 
                     analyst.doInBackground();
                 }else{
                     JOptionPane.showMessageDialog(null, "Please Enter the Starting Frames or Select to include all frames");
                 }
         }else{
-            //JOptionPane.showMessageDialog(null, "You need to choose the datafiles");
+            JOptionPane.showMessageDialog(null, "You need to choose the datafiles");
         }
         
         
