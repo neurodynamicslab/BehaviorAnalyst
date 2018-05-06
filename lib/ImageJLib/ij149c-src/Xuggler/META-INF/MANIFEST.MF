@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.2
+Created-By: 1.6.0_23-b23 (Sun Microsystems Inc.)
+Implementation-Vendor: www.xuggle.com
+Implementation-Title: xuggle-xuggler
+Implementation-Version: 5.4.0
+Main-Class: com.xuggle.xuggler.Converter
+Xuggle-Native-App: xuggle-xuggler
+Xuggle-Native-Root: /com/xuggle/ferry
+Xuggle-Native-Paths: i386-xuggle-darwin11;i686-pc-linux-gnu;i686-w64-m
+ ingw32;x86_64-pc-linux-gnu;x86_64-w64-mingw32;x86_64-xuggle-darwin11
+Xuggle-Native-Bundles: i386-xuggle-darwin11;i686-pc-linux-gnu;i686-w64
+ -mingw32;x86_64-pc-linux-gnu;x86_64-w64-mingw32;x86_64-xuggle-darwin1
+ 1
+Class-Path: commons-cli.jar logback-classic.jar logback-core.jar slf4j
+ -api.jar
+

@@ -18,11 +18,9 @@ public class BehaviorAnalyst {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrontEnd_MainFrame().setVisible(true);
-            }
-        });
+         java.awt.EventQueue.invokeLater(() -> {
+             new FrontEnd_MainFrame().setVisible(true);
+         });
          if(isEventDispatchThread()){
              System.out.print("It is an event dispatch thread");
          }

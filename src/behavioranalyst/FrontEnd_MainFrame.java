@@ -7,6 +7,8 @@ package behavioranalyst;
 
 import NDL_JavaClassLib.MultiFileDialog;
 import NDL_JavaClassLib.MultiSelectFrame;
+import NDL_JavaClassLib.TraceData;
+import ij.ImagePlus;
 import javax.swing.JOptionPane;
 
 
@@ -17,17 +19,27 @@ import javax.swing.JOptionPane;
  */
 public class FrontEnd_MainFrame extends javax.swing.JFrame {
 
-    private String[] fNames; //File Names of the data for Schema Analyser. The data format is frame number space x space y space newline. 
     private SchemaDataReader analyst;
     private startFrameEntryDialog startFrameEntry;
-
+    
+    private String[] fNames;                        //File Names of the data for Schema Analyser. 
+                                                    //The data format is frame number space x space y space newline.
+    private TraceData [] rawPositions;              //stores the x,y co-ordinate of the tracked object.
+                                                    //Future implementation should look for linking these through HashMaps with filename as a key.
+    private ImagePlus [] heatMaps;
+    
+   
     /**
      * Creates new form FrontEnd_MainFrame
+     * @param behaviorAnalyst
      */
     public FrontEnd_MainFrame() {
         
+        //this.behaviorAnalyst = behaviorAnalyst;
         initComponents();
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,7 +63,7 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         OpenVideoMenu = new javax.swing.JMenuItem();
         OpenTrackDataMenu = new javax.swing.JMenuItem();
         ImportSchemaAnalyser = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        exportMenuItem = new javax.swing.JMenuItem();
         AnalysisMenu = new javax.swing.JMenu();
         TrackMenu = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -113,8 +125,13 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         });
         FileMenu.add(ImportSchemaAnalyser);
 
-        jMenuItem1.setText("Export Track Data");
-        FileMenu.add(jMenuItem1);
+        exportMenuItem.setText("Export Track Data");
+        exportMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportMenuItemActionPerformed(evt);
+            }
+        });
+        FileMenu.add(exportMenuItem);
 
         MenuBar_FrontEnd.add(FileMenu);
 
@@ -199,13 +216,14 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         Fs.setVisible(true);
         
         int status = Fs.getResult();
-        if(status == MultiSelectFrame.OPEN){
-            
-                this.fNames = Fs.getSelectionArray();
-                
+        if(status == MultiSelectFrame.OPEN){          
+            this.fNames = Fs.getSelectionArray();
+            if(fNames.length == 0){
+                JOptionPane.showMessageDialog(null, "You need to choose the datafiles");
+                return;
+            }else{
                 this.startFrameEntry = new startFrameEntryDialog(this, true);
                 startFrameEntry.setVisible(true);
-                
                 if (startFrameEntry.isUp2date()){
                     if(startFrameEntry.getIncludeAllFramesStatus()){
                         analyst = new SchemaDataReader(fNames);
@@ -214,17 +232,23 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
                         analyst = new SchemaDataReader(fNames,startS);
                     }
                     int nFrames = startFrameEntry.getnFrames();
-                    analyst.setDataLength(nFrames);                //// Get the time period from GUI. 
-                    analyst.doInBackground();
+                    analyst.setDataLength(nFrames);                
+                    this.rawPositions = analyst.doInBackground();
                 }else{
                     JOptionPane.showMessageDialog(null, "Please Enter the Starting Frames or Select to include all frames");
                 }
+            }
         }else{
             JOptionPane.showMessageDialog(null, "You need to choose the datafiles");
         }
         
         
     }//GEN-LAST:event_ImportSchemaAnalyserActionPerformed
+
+    private void exportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMenuItemActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_exportMenuItemActionPerformed
 
    
 
@@ -239,12 +263,12 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem OpenVideoMenu;
     private javax.swing.JMenu TrackMenu;
     private javax.swing.JLabel dataReadyStatus;
+    private javax.swing.JMenuItem exportMenuItem;
     private javax.swing.JLabel filesReadyStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JSeparator jSeparator1;
