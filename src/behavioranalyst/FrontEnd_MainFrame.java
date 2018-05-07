@@ -9,6 +9,11 @@ import NDL_JavaClassLib.MultiFileDialog;
 import NDL_JavaClassLib.MultiSelectFrame;
 import NDL_JavaClassLib.TraceData;
 import ij.ImagePlus;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 
@@ -58,16 +63,20 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        MessageTextArea = new javax.swing.JTextArea();
+        jLabel5 = new javax.swing.JLabel();
         MenuBar_FrontEnd = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         OpenVideoMenu = new javax.swing.JMenuItem();
         OpenTrackDataMenu = new javax.swing.JMenuItem();
         ImportSchemaAnalyser = new javax.swing.JMenuItem();
-        exportMenuItem = new javax.swing.JMenuItem();
+        exportAllMenuItem = new javax.swing.JMenuItem();
         AnalysisMenu = new javax.swing.JMenu();
         TrackMenu = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         MapsMenu = new javax.swing.JMenu();
         GenerateHMaps = new javax.swing.JMenuItem();
 
@@ -104,6 +113,14 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
 
         jLabel4.setText("Maps Ready");
 
+        MessageTextArea.setColumns(20);
+        MessageTextArea.setLineWrap(true);
+        MessageTextArea.setRows(5);
+        MessageTextArea.setEnabled(false);
+        jScrollPane1.setViewportView(MessageTextArea);
+
+        jLabel5.setText("Message Board:");
+
         FileMenu.setText("File");
 
         OpenVideoMenu.setText("Open Video");
@@ -125,13 +142,13 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         });
         FileMenu.add(ImportSchemaAnalyser);
 
-        exportMenuItem.setText("Export Track Data");
-        exportMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        exportAllMenuItem.setText("Export All Tracks Data");
+        exportAllMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportMenuItemActionPerformed(evt);
+                exportAllMenuItemActionPerformed(evt);
             }
         });
-        FileMenu.add(exportMenuItem);
+        FileMenu.add(exportAllMenuItem);
 
         MenuBar_FrontEnd.add(FileMenu);
 
@@ -145,6 +162,10 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
 
         jMenuItem2.setText("Start Tracking");
         TrackMenu.add(jMenuItem2);
+
+        jMenuItem1.setText("Export Current Track");
+        jMenuItem1.setEnabled(false);
+        TrackMenu.add(jMenuItem1);
 
         MenuBar_FrontEnd.add(TrackMenu);
 
@@ -162,7 +183,11 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(552, 552, 552)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,6 +226,12 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
                     .addComponent(mapsReadyStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addContainerGap(235, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -245,10 +276,41 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_ImportSchemaAnalyserActionPerformed
 
-    private void exportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMenuItemActionPerformed
+    private void exportAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAllMenuItemActionPerformed
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_exportMenuItemActionPerformed
+        String outName = "",outData = "";
+        File  tmp = null;
+        FileWriter outFile;
+        int idx = -1;
+        TraceData data;
+        
+        
+        for(int count = 0 ; count < fNames.length ; count++){
+             idx = fNames[count].lastIndexOf(".");
+             if(idx != -1){
+                 outName = fNames[count].substring(0, idx+1);
+             }else{
+                 //the datafile does not have any extension
+                 //do nothing
+                 outName = fNames[count];
+             }
+             outName += "_TrackData.txt";
+             
+            try{
+                outFile = new FileWriter(outName);
+                data = this.rawPositions[count];
+
+                for(int frameNo =  0 ; frameNo < data.getDataLength(); frameNo++)
+                    outData += ((int)data.getX(frameNo)) + "\t" + ((int)data.getY(frameNo)) + "\n";
+                outFile.write(outData);
+                outFile.close();
+                //outFile = new File(outName);
+            } catch (IOException ex) {
+                Logger.getLogger(FrontEnd_MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+        }
+    }//GEN-LAST:event_exportAllMenuItemActionPerformed
 
    
 
@@ -259,18 +321,22 @@ public class FrontEnd_MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem ImportSchemaAnalyser;
     private javax.swing.JMenu MapsMenu;
     private javax.swing.JMenuBar MenuBar_FrontEnd;
+    private javax.swing.JTextArea MessageTextArea;
     private javax.swing.JMenuItem OpenTrackDataMenu;
     private javax.swing.JMenuItem OpenVideoMenu;
     private javax.swing.JMenu TrackMenu;
     private javax.swing.JLabel dataReadyStatus;
-    private javax.swing.JMenuItem exportMenuItem;
+    private javax.swing.JMenuItem exportAllMenuItem;
     private javax.swing.JLabel filesReadyStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel mapsReadyStatus;
     // End of variables declaration//GEN-END:variables
